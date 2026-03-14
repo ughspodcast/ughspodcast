@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>University en Vivo — University Gardens</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #fff7f7;
+      --bg-2: #fffdfd;
+      --panel: rgba(255, 255, 255, 0.66);
+      --panel-strong: rgba(255, 255, 255, 0.86);
+      --text: #281d1f;
+      --muted: #7e666a;
+      --line: rgba(150, 71, 84, 0.12);
+      --soft-red: #e98e98;
+      --soft-red-2: #f3b2b7;
+      --soft-red-3: #fff0f1;
+      --shadow: 0 20px 60px rgba(184, 92, 104, 0.12);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --blur: blur(20px);
+      --ease: cubic-bezier(.22, 1, .36, 1);
+      --nav-h: 76px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(233, 142, 152, 0.22), transparent 34%),
+        radial-gradient(circle at 88% 10%, rgba(243, 178, 183, 0.28), transparent 32%),
+        radial-gradient(circle at 50% 100%, rgba(255, 221, 225, 0.55), transparent 45%),
+        linear-gradient(180deg, #fff8f8 0%, #fffefe 42%, #fff5f6 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+
+    .noise,
+    .glow,
+    .glow-2,
+    .glow-3 {
+      position: fixed;
+      pointer-events: none;
+      inset: auto;
+      z-index: 0;
+      filter: blur(40px);
+      opacity: .8;
+    }
+
+    .glow {
+      width: 420px;
+      height: 420px;
+      left: -90px;
+      top: 90px;
+      background: radial-gradient(circle, rgba(243, 178, 183, 0.38), transparent 60%);
+      animation: floatBlob 14s var(--ease) infinite alternate;
+    }
+
+    .glow-2 {
+      width: 420px;
+      height: 420px;
+      right: -110px;
+      top: 120px;
+      background: radial-gradient(circle, rgba(233, 142, 152, 0.24), transparent 58%);
+      animation: floatBlob 18s var(--ease) infinite alternate-reverse;
+    }
+
+    .glow-3 {
+      width: 480px;
+      height: 480px;
+      left: 50%;
+      bottom: -220px;
+      transform: translateX(-50%);
+      background: radial-gradient(circle, rgba(255, 216, 220, 0.55), transparent 60%);
+      animation: pulseBlob 12s var(--ease) infinite;
+    }
+
+    .noise {
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.15), rgba(255,255,255,.15)),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+      mix-blend-mode: soft-light;
+      opacity: .45;
+      filter: none;
+    }
+
+    .site {
+      position: relative;
+      z-index: 1;
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding-bottom: 120px;
+    }
+
+    .nav {
+      position: sticky;
+      top: 12px;
+      z-index: 30;
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      margin: 14px 0 10px;
+      border: 1px solid rgba(255,255,255,0.72);
+      background: linear-gradient(180deg, rgba(255,255,255,.76), rgba(255,255,255,.52));
+      box-shadow: var(--shadow);
+      border-radius: 999px;
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(255, 239, 241, .88));
+      border: 1px solid rgba(233, 142, 152, 0.18);
+      box-shadow: 0 8px 30px rgba(184, 92, 104, 0.12);
+      flex-shrink: 0;
+    }
+
+    .brand-badge svg {
+      width: 18px;
+      height: 18px;
+      color: #c96b76;
+    }
+
+    .brand-copy { min-width: 0; }
+    .brand-copy p,
+    .brand-copy h1 {
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand-copy p {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .brand-copy h1 {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -.03em;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-links a {
+      padding: 12px 16px;
+      font-size: 14px;
+      color: rgba(40, 29, 31, 0.72);
+      border-radius: 999px;
+      transition: background .45s var(--ease), color .45s var(--ease), transform .45s var(--ease);
+    }
+
+    .nav-links a:hover {
+      background: rgba(233, 142, 152, 0.1);
+      color: var(--text);
+      transform: translateY(-1px);
+    }
+
+    .menu-btn {
+      display: none;
+      border: 0;
+      background: rgba(255,255,255,.72);
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 30px rgba(184, 92, 104, .12);
+      color: #9e5f67;
+      cursor: pointer;
+    }
+
+    .mobile-menu {
+      position: fixed;
+      top: calc(var(--nav-h) + 20px);
+      left: 14px;
+      right: 14px;
+      z-index: 25;
+      padding: 10px;
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,0.72);
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(-12px) scale(.98);
+      pointer-events: none;
+      transition: opacity .5s var(--ease), transform .5s var(--ease);
+    }
+
+    .mobile-menu.open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .mobile-menu a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 16px;
+      border-radius: 18px;
+      color: rgba(40, 29, 31, .82);
+      transition: background .35s var(--ease), transform .35s var(--ease);
+    }
+
+    .mobile-menu a:hover {
+      background: rgba(233, 142, 152, 0.08);
+      transform: translateX(2px);
+    }
+
+    .hero {
+      min-height: calc(100vh - 40px);
+      display: grid;
+      align-items: center;
+      grid-template-columns: 1.12fr .88fr;
+      gap: 26px;
+      padding: 28px 0 24px;
+    }
+
+    .hero-copy,
+    .hero-visual,
+    .section-intro,
+    .about-panel,
+    .about-grid > article,
+    .contact-card,
+    .episode-card {
+      opacity: 0;
+      transform: translateY(32px) scale(.985);
+      transition:
+        opacity 1.1s var(--ease),
+        transform 1.1s var(--ease),
+        filter 1.1s var(--ease);
+      filter: blur(10px);
+    }
+
+    .show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.88);
+      background: rgba(255,255,255,.65);
+      box-shadow: 0 10px 30px rgba(184, 92, 104, 0.08);
+      backdrop-filter: blur(14px);
+      color: #8d5f66;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+
+    .sparkle {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #e98e98, #f3b2b7);
+      box-shadow: 0 0 20px rgba(233, 142, 152, .5);
+      animation: pulseDot 2.8s var(--ease) infinite;
+    }
+
+    .hero-copy h2 {
+      margin: 18px 0 0;
+      font-size: clamp(3.2rem, 7vw, 6.4rem);
+      line-height: .94;
+      letter-spacing: -.075em;
+      font-weight: 800;
+    }
+
+    .hero-copy h2 span {
+      display: block;
+      background: linear-gradient(180deg, #c96b76, #8f5860 120%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-copy p {
+      margin: 22px 0 0;
+      max-width: 640px;
+      font-size: clamp(1rem, 1.4vw, 1.08rem);
+      line-height: 1.8;
+      color: var(--muted);
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 28px;
+      flex-wrap: wrap;
+    }
+
+    .btn,
+    .ghost-btn {
+      height: 54px;
+      padding: 0 22px;
+      border-radius: 999px;
+      border: 0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      transition:
+        transform .5s var(--ease),
+        box-shadow .5s var(--ease),
+        background .5s var(--ease),
+        color .5s var(--ease),
+        border-color .5s var(--ease);
+    }
+
+    .btn {
+      background: linear-gradient(180deg, #ef9aa3, #e38690);
+      color: white;
+      box-shadow: 0 18px 40px rgba(227, 134, 144, .28);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 24px 50px rgba(227, 134, 144, .35);
+    }
+
+    .ghost-btn {
+      background: rgba(255,255,255,.62);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,.88);
+      box-shadow: 0 12px 30px rgba(184, 92, 104, .08);
+    }
+
+    .ghost-btn:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.9);
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 28px;
+      max-width: 620px;
+    }
+
+    .stat {
+      border-radius: 24px;
+      padding: 18px 18px 16px;
+      background: linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.48));
+      border: 1px solid rgba(255,255,255,.86);
+      box-shadow: 0 14px 34px rgba(184, 92, 104, .07);
+      backdrop-filter: blur(16px);
+      transform: translateZ(0);
+      transition: transform .7s var(--ease), box-shadow .7s var(--ease);
+    }
+
+    .stat:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 44px rgba(184, 92, 104, .12);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.6rem;
+      letter-spacing: -.05em;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .92rem;
+      line-height: 1.45;
+    }
+
+    .hero-visual {
+      position: relative;
+    }
+
+    .player-shell {
+      position: relative;
+      overflow: hidden;
+      border-radius: 38px;
+      border: 1px solid rgba(255,255,255,.82);
+      background: linear-gradient(180deg, rgba(255,255,255,.76), rgba(255,255,255,.44));
+      box-shadow: 0 28px 80px rgba(184, 92, 104, 0.18);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      transform: translateZ(0);
+    }
+
+    .player-top {
+      position: relative;
+      padding: 28px 26px 24px;
+      min-height: 320px;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,.65), transparent 30%),
+        linear-gradient(135deg, rgba(243,178,183,.75), rgba(255,255,255,.35) 45%, rgba(233,142,152,.24));
+    }
+
+    .player-top::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent, rgba(255,255,255,.16));
+      pointer-events: none;
+    }
+
+    .player-pill {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: rgba(91, 49, 56, .75);
+      background: rgba(255,255,255,.54);
+      border: 1px solid rgba(255,255,255,.72);
+      backdrop-filter: blur(10px);
+    }
+
+    .player-wave {
+      position: absolute;
+      right: -50px;
+      bottom: -30px;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,.55), rgba(255,255,255,0) 62%);
+      animation: pulseBlob 10s var(--ease) infinite;
+    }
+
+    .player-blob {
+      position: absolute;
+      left: -20px;
+      top: 40px;
+      width: 140px;
+      height: 140px;
+      border-radius: 34px;
+      background: linear-gradient(135deg, rgba(255,255,255,.82), rgba(255,255,255,.32));
+      transform: rotate(24deg);
+      box-shadow: 0 18px 40px rgba(184, 92, 104, .12);
+      animation: tiltFloat 10s var(--ease) infinite alternate;
+    }
+
+    .episode-icon {
+      position: relative;
+      z-index: 1;
+      width: 74px;
+      height: 74px;
+      display: grid;
+      place-items: center;
+      border-radius: 24px;
+      background: rgba(255,255,255,.58);
+      border: 1px solid rgba(255,255,255,.72);
+      box-shadow: 0 16px 40px rgba(184, 92, 104, .12);
+      backdrop-filter: blur(10px);
+      color: #b96671;
+      margin-top: 26px;
+    }
+
+    .episode-icon svg {
+      width: 34px;
+      height: 34px;
+    }
+
+    .player-title {
+      position: relative;
+      z-index: 1;
+      margin-top: 22px;
+    }
+
+    .player-title small {
+      display: inline-block;
+      color: rgba(91, 49, 56, .62);
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .player-title h3 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: .98;
+      letter-spacing: -.06em;
+      max-width: 12ch;
+      color: #40292d;
+    }
+
+    .player-title p {
+      margin: 14px 0 0;
+      max-width: 42ch;
+      color: rgba(72, 42, 47, .72);
+      line-height: 1.75;
+      font-size: .98rem;
+    }
+
+    .player-bottom {
+      padding: 24px 26px 26px;
+    }
+
+    .player-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .meta-group small,
+    .meta-group strong {
+      display: block;
+    }
+
+    .meta-group small {
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      margin-bottom: 6px;
+    }
+
+    .meta-group strong {
+      font-size: 1.05rem;
+      letter-spacing: -.03em;
+    }
+
+    .play-btn {
+      width: 58px;
+      height: 58px;
+      border: 0;
+      border-radius: 50%;
+      background: linear-gradient(180deg, #ef9aa3, #e38690);
+      color: white;
+      display: grid;
+      place-items: center;
+      box-shadow: 0 18px 40px rgba(227, 134, 144, .3);
+      cursor: pointer;
+      transition: transform .55s var(--ease), box-shadow .55s var(--ease);
+    }
+
+    .play-btn:hover {
+      transform: translateY(-2px) scale(1.04);
+      box-shadow: 0 26px 50px rgba(227, 134, 144, .38);
+    }
+
+    .play-btn svg { width: 22px; height: 22px; }
+
+    .progress-wrap {
+      margin-top: 24px;
+    }
+
+    .progress-bar {
+      position: relative;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(233, 142, 152, .12);
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .progress-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #e2828d, #f2afb5);
+      box-shadow: 0 8px 20px rgba(227, 134, 144, .22);
+      transition: width .2s linear;
+    }
+
+    .progress-glow {
+      position: absolute;
+      right: -18px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.9);
+      box-shadow: 0 0 30px rgba(243, 178, 183, .65);
+      opacity: .95;
+    }
+
+    .time-row {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: .02em;
+    }
+
+    .player-features {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .feature-chip {
+      border-radius: 22px;
+      padding: 14px 14px 12px;
+      background: rgba(255,255,255,.54);
+      border: 1px solid rgba(255,255,255,.8);
+      text-align: center;
+      box-shadow: 0 12px 26px rgba(184, 92, 104, .06);
+    }
+
+    .feature-chip strong {
+      display: block;
+      font-size: .98rem;
+      letter-spacing: -.02em;
+    }
+
+    .feature-chip span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    section {
+      padding-top: 38px;
+      scroll-margin-top: calc(var(--nav-h) + 26px);
+    }
+
+    .section-intro {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 18px;
+    }
+
+    .section-intro p,
+    .section-intro h3,
+    .section-intro .desc {
+      margin: 0;
+    }
+
+    .section-intro p {
+      color: #a06c73;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-weight: 700;
+    }
+
+    .section-intro h3 {
+      margin-top: 10px;
+      font-size: clamp(2rem, 3vw, 3rem);
+      letter-spacing: -.06em;
+      line-height: 1;
+    }
+
+    .section-intro .desc {
+      max-width: 520px;
+      font-size: .98rem;
+      line-height: 1.75;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .episodes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .episode-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 30px;
+      border: 1px solid rgba(255,255,255,.84);
+      background: linear-gradient(180deg, rgba(255,255,255,.74), rgba(255,255,255,.48));
+      box-shadow: 0 20px 50px rgba(184, 92, 104, .1);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      cursor: pointer;
+      padding: 22px;
+      min-height: 340px;
+      transition:
+        transform .8s var(--ease),
+        box-shadow .8s var(--ease),
+        border-color .8s var(--ease),
+        background .8s var(--ease);
+      isolation: isolate;
+    }
+
+    .episode-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 30px 70px rgba(184, 92, 104, .16);
+    }
+
+    .episode-card.active {
+      border-color: rgba(233, 142, 152, .4);
+      background: linear-gradient(180deg, rgba(255,255,255,.84), rgba(255, 242, 244, .64));
+      box-shadow: 0 34px 80px rgba(184, 92, 104, .18);
+    }
+
+    .episode-card::before {
+      content: "";
+      position: absolute;
+      inset: auto -50px -60px auto;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(243, 178, 183, .35), transparent 64%);
+      z-index: -1;
+      transition: transform 1.2s var(--ease), opacity 1.2s var(--ease);
+    }
+
+    .episode-card:hover::before,
+    .episode-card.active::before {
+      transform: scale(1.18);
+      opacity: 1;
+    }
+
+    .episode-head {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .episode-type {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.66);
+      border: 1px solid rgba(255,255,255,.85);
+      color: #955b63;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    .episode-duration {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      padding-top: 10px;
+    }
+
+    .episode-card h4 {
+      margin: 18px 0 0;
+      font-size: 1.85rem;
+      line-height: .98;
+      letter-spacing: -.06em;
+    }
+
+    .episode-card p {
+      margin: 14px 0 0;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: .97rem;
+      max-width: 30ch;
+    }
+
+    .episode-footer {
+      margin-top: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .episode-label {
+      font-size: .95rem;
+      font-weight: 600;
+      color: #7e5f64;
+    }
+
+    .mini-play {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 0;
+      display: grid;
+      place-items: center;
+      color: white;
+      background: linear-gradient(180deg, #ef9aa3, #e38690);
+      box-shadow: 0 14px 30px rgba(227, 134, 144, .24);
+      transition: transform .55s var(--ease), box-shadow .55s var(--ease);
+    }
+
+    .episode-card:hover .mini-play,
+    .episode-card.active .mini-play {
+      transform: scale(1.06);
+      box-shadow: 0 22px 40px rgba(227, 134, 144, .33);
+    }
+
+    .mini-play svg { width: 17px; height: 17px; }
+
+    .about-layout {
+      display: grid;
+      grid-template-columns: .92fr 1.08fr;
+      gap: 16px;
+    }
+
+    .about-panel,
+    .about-grid > article,
+    .contact-card {
+      border-radius: 32px;
+      border: 1px solid rgba(255,255,255,.84);
+      background: linear-gradient(180deg, rgba(255,255,255,.74), rgba(255,255,255,.48));
+      box-shadow: 0 20px 50px rgba(184, 92, 104, .08);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .about-panel {
+      padding: 24px;
+    }
+
+    .about-panel p:first-child {
+      margin: 0;
+      color: #a06c73;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-weight: 700;
+    }
+
+    .about-panel h3 {
+      margin: 12px 0 0;
+      font-size: clamp(1.9rem, 3vw, 2.8rem);
+      line-height: 1.02;
+      letter-spacing: -.06em;
+    }
+
+    .about-panel .body {
+      margin-top: 16px;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: .98rem;
+    }
+
+    .about-callout {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,.74), rgba(255, 245, 246, .72));
+      border: 1px solid rgba(255,255,255,.82);
+      box-shadow: 0 12px 30px rgba(184, 92, 104, .06);
+    }
+
+    .about-callout small,
+    .about-callout strong {
+      display: block;
+    }
+
+    .about-callout small {
+      color: var(--muted);
+      margin-bottom: 8px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+    }
+
+    .about-callout strong {
+      font-size: 1.03rem;
+      line-height: 1.55;
+      letter-spacing: -.02em;
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .about-grid > article {
+      padding: 22px;
+      transition: transform .7s var(--ease), box-shadow .7s var(--ease);
+    }
+
+    .about-grid > article:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 28px 60px rgba(184, 92, 104, .14);
+    }
+
+    .about-grid h4 {
+      margin: 0;
+      font-size: 1.2rem;
+      letter-spacing: -.04em;
+    }
+
+    .about-grid p {
+      margin: 12px 0 0;
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: .96rem;
+    }
+
+    .contact-card {
+      padding: 24px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      margin-top: 16px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .contact-card::after {
+      content: "";
+      position: absolute;
+      right: -50px;
+      bottom: -50px;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(243, 178, 183, .28), transparent 64%);
+      pointer-events: none;
+    }
+
+    .contact-card p:first-child {
+      margin: 0;
+      color: #a06c73;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-weight: 700;
+    }
+
+    .contact-card h3 {
+      margin: 12px 0 0;
+      font-size: clamp(1.9rem, 3vw, 3rem);
+      line-height: 1.02;
+      letter-spacing: -.06em;
+      max-width: 14ch;
+    }
+
+    .contact-card .text {
+      margin-top: 14px;
+      max-width: 60ch;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: .98rem;
+    }
+
+    .socials {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      position: relative;
+      z-index: 1;
+    }
+
+    .social {
+      min-width: 142px;
+      height: 52px;
+      padding: 0 18px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border: 1px solid rgba(255,255,255,.86);
+      background: rgba(255,255,255,.72);
+      color: #7b5960;
+      box-shadow: 0 12px 28px rgba(184, 92, 104, .08);
+      transition: transform .55s var(--ease), background .55s var(--ease), box-shadow .55s var(--ease);
+    }
+
+    .social.primary {
+      background: linear-gradient(180deg, #ef9aa3, #e38690);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 18px 40px rgba(227, 134, 144, .26);
+    }
+
+    .social:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px rgba(184, 92, 104, .14);
+    }
+
+    .dock {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      z-index: 40;
+      width: min(760px, calc(100% - 28px));
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,.86);
+      background: rgba(255,255,255,.76);
+      box-shadow: 0 28px 70px rgba(184, 92, 104, .18);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: transform .7s var(--ease), box-shadow .7s var(--ease), opacity .7s var(--ease);
+    }
+
+    .dock:hover {
+      transform: translateX(-50%) translateY(-2px);
+      box-shadow: 0 34px 80px rgba(184, 92, 104, .22);
+    }
+
+    .dock-badge {
+      width: 52px;
+      height: 52px;
+      flex-shrink: 0;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(243,178,183,.8), rgba(255,255,255,.85));
+      border: 1px solid rgba(255,255,255,.86);
+      display: grid;
+      place-items: center;
+      color: #b56670;
+      box-shadow: 0 12px 30px rgba(184, 92, 104, .1);
+    }
+
+    .dock-badge svg { width: 24px; height: 24px; }
+
+    .dock-copy {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .dock-copy strong,
+    .dock-copy span {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dock-copy strong {
+      font-size: .98rem;
+      letter-spacing: -.03em;
+    }
+
+    .dock-copy span {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    .dock-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 210px;
+    }
+
+    .dock-line {
+      flex: 1;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(233, 142, 152, .12);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .dock-line > div {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #e2828d, #f2afb5);
+      transition: width .2s linear;
+    }
+
+    .dock-toggle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 0;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(180deg, #ef9aa3, #e38690);
+      color: white;
+      box-shadow: 0 16px 30px rgba(227, 134, 144, .28);
+      cursor: pointer;
+    }
+
+    footer {
+      padding: 34px 0 10px;
+      text-align: center;
+      color: #9a767b;
+      font-size: .92rem;
+    }
+
+    @keyframes floatBlob {
+      0% { transform: translate3d(0,0,0) scale(1); }
+      50% { transform: translate3d(24px,-18px,0) scale(1.08); }
+      100% { transform: translate3d(-8px,20px,0) scale(.97); }
+    }
+
+    @keyframes pulseBlob {
+      0%, 100% { transform: scale(1); opacity: .78; }
+      50% { transform: scale(1.09); opacity: .96; }
+    }
+
+    @keyframes tiltFloat {
+      0% { transform: rotate(24deg) translateY(0px); }
+      100% { transform: rotate(10deg) translateY(14px); }
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: .9; }
+      50% { transform: scale(1.35); opacity: 1; }
+    }
+
+    @media (max-width: 1080px) {
+      .hero { grid-template-columns: 1fr; gap: 22px; min-height: auto; padding-top: 14px; }
+      .hero-copy { order: 1; }
+      .hero-visual { order: 2; }
+      .episodes-grid,
+      .about-layout { grid-template-columns: 1fr; }
+      .section-intro { flex-direction: column; align-items: start; }
+      .section-intro .desc { text-align: left; }
+      .contact-card { flex-direction: column; align-items: start; }
+      .socials { justify-content: flex-start; }
+    }
+
+    @media (max-width: 760px) {
+      :root { --nav-h: 70px; }
+      .site { width: min(100% - 16px, 1180px); }
+      .nav { padding: 12px 14px; }
+      .nav-links { display: none; }
+      .menu-btn { display: inline-flex; }
+      .brand-copy p { font-size: 11px; }
+      .brand-copy h1 { font-size: 14px; }
+      .hero { padding: 10px 0 4px; }
+      .hero-copy h2 { font-size: clamp(2.7rem, 15vw, 4.3rem); }
+      .hero-copy p { font-size: .98rem; line-height: 1.75; }
+      .hero-actions { gap: 10px; }
+      .btn, .ghost-btn { width: 100%; justify-content: center; }
+      .hero-stats { grid-template-columns: 1fr; }
+      .player-top { min-height: unset; padding: 24px 20px 22px; }
+      .player-bottom { padding: 20px; }
+      .player-features { grid-template-columns: 1fr; }
+      .episodes-grid { grid-template-columns: 1fr; gap: 14px; }
+      .episode-card { min-height: 0; padding: 20px; }
+      .episode-card h4 { font-size: 1.7rem; }
+      .about-grid { grid-template-columns: 1fr; }
+      .contact-card { padding: 20px; }
+      .social { width: 100%; min-width: 0; }
+      .dock {
+        width: calc(100% - 14px);
+        bottom: 10px;
+        padding: 12px;
+        gap: 10px;
+      }
+      .dock-copy strong { font-size: .92rem; }
+      .dock-controls { min-width: 0; width: 100%; }
+      .dock {
+        display: grid;
+        grid-template-columns: 48px 1fr;
+      }
+      .dock-controls {
+        grid-column: 1 / -1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="glow"></div>
+  <div class="glow-2"></div>
+  <div class="glow-3"></div>
+
+  <div class="site">
+    <header class="nav">
+      <a href="#home" class="brand">
+        <div class="brand-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3v13"></path>
+            <path d="M18 9a6 6 0 0 1-12 0"></path>
+            <path d="M8 21h8"></path>
+            <path d="M12 17v4"></path>
+          </svg>
+        </div>
+        <div class="brand-copy">
+          <p>University Gardens</p>
+          <h1>University en Vivo</h1>
+        </div>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#episodes">Episodes</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <button class="menu-btn" id="menuBtn" aria-label="Abrir menú">
+        <svg id="menuIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h16"></path></svg>
+      </button>
+    </header>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#home">Home <span>→</span></a>
+      <a href="#episodes">Episodes <span>→</span></a>
+      <a href="#about">About <span>→</span></a>
+      <a href="#contact">Contact <span>→</span></a>
+    </div>
+
+    <section class="hero" id="home">
+      <div class="hero-copy reveal">
+        <div class="eyebrow">
+          <span class="sparkle"></span>
+          La voz estudiantil de University Gardens
+        </div>
+        <h2>
+          University
+          <span>en Vivo.</span>
+        </h2>
+        <p>
+          Nuestro podcast tiene como propósito crear un espacio donde los universitygardeños puedan expresarse y compartir ideas. Queremos hablar sobre temas que impactan nuestra comunidad escolar y ofrecer un espacio diferente que permita a los estudiantes salir de su zona de confort mientras desarrollan su voz.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#episodes" class="btn">Ver temas</a>
+          <a href="#about" class="ghost-btn">Conocer el proyecto</a>
+        </div>
+
+        <div class="hero-stats">
+          <article class="stat">
+            <a href="https://www.tiktok.com/" target="_blank" rel="noopener noreferrer" aria-label="TikTok" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;min-height:88px;">
+              <img src="assets/tiktok.png" alt="TikTok" style="max-width:130px;width:80%;height:auto;object-fit:contain;display:block;" />
+            </a>
+          </article>
+          <article class="stat">
+            <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;min-height:88px;">
+              <img src="assets/instagram.png" alt="Instagram" style="max-width:130px;width:80%;height:auto;object-fit:contain;display:block;" />
+            </a>
+          </article>
+          <article class="stat">
+            <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="YouTube" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;min-height:88px;">
+              <img src="assets/youtube.png" alt="YouTube" style="max-width:130px;width:80%;height:auto;object-fit:contain;display:block;" />
+            </a>
+          </article>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal">
+        <div class="player-shell">
+          <div class="player-top">
+            <div class="player-pill">Now Playing</div>
+            <div class="player-blob"></div>
+            <div class="player-wave"></div>
+
+            <div class="episode-icon" id="mainIcon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2v20"></path>
+                <path d="M7 7a5 5 0 0 0 10 0"></path>
+                <path d="M5 10a7 7 0 0 0 14 0"></path>
+              </svg>
+            </div>
+
+            <div class="player-title">
+              <small id="mainTag">Tema del podcast</small>
+              <h3 id="mainTitle">Vida estudiantil</h3>
+              <p id="mainDesc">Conversaciones, entrevistas y videos para dar voz a los estudiantes, destacar talentos, discutir temas importantes y fortalecer el sentido de comunidad dentro de la escuela.</p>
+            </div>
+          </div>
+
+          <div class="player-bottom">
+            <div class="player-row">
+              <div class="meta-group">
+                <small>Podcast destacado</small>
+                <strong id="mainMeta">Vida estudiantil · tema inicial</strong>
+              </div>
+              <button class="play-btn" id="heroPlayBtn" aria-label="Reproducir o pausar">
+                <svg id="heroPlayIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5-10-6.5z"></path></svg>
+              </button>
+            </div>
+
+            <div class="progress-wrap">
+              <div class="progress-bar" id="heroProgressBar">
+                <div class="progress-fill" id="heroProgressFill">
+                  <div class="progress-glow"></div>
+                </div>
+              </div>
+              <div class="time-row">
+                <span id="currentTime">0:00</span>
+                <span id="durationTime">0:00</span>
+              </div>
+            </div>
+
+            <div class="player-features">
+              <article class="feature-chip">
+                <strong>Podcast</strong>
+                <span>2-3 al mes</span>
+              </article>
+              <article class="feature-chip">
+                <strong>Clips</strong>
+                <span>2-3 por semana</span>
+              </article>
+              <article class="feature-chip">
+                <strong>Edición</strong>
+                <span>semana 1 y 2</span>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="episodes">
+      <div class="section-intro reveal">
+        <div>
+          <p>Podcast</p>
+          <h3>Podcasts</h3>
+        </div>
+        <div class="desc">
+          Estos son algunos de los primeros temas del podcast escolar y el contenido escolar que desarrollamos para la comunidad estudiantil.
+        </div>
+      </div>
+
+      <div class="episodes-grid">
+        <article class="episode-card reveal active" data-id="1" data-title="Vida estudiantil" data-tag="Vida escolar" data-duration="12 min" data-youtube="https://www.youtube.com/watch?v=VXszd0PKtSc&pp=ygUNamhheSB3aGVlbGVycw%3D%3D" data-desc="Hablamos sobre las experiencias reales dentro de la escuela, la rutina académica, el ambiente estudiantil y lo que significa ser parte de University Gardens." data-icon="graduation">
+          <div class="episode-head">
+            <div class="episode-type">Vida escolar</div>
+            <div class="episode-duration">12 min</div>
+          </div>
+          <h4>Vida estudiantil</h4>
+          <p>Hablamos sobre las experiencias reales dentro de la escuela, la rutina académica, el ambiente estudiantil y lo que significa ser parte de University Gardens.</p>
+          <div class="episode-footer">
+            <span class="episode-label">Seleccionado</span>
+            <button class="mini-play" aria-label="Reproducir Vida estudiantil">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5-10-6.5z"></path></svg>
+            </button>
+          </div>
+        </article>
+
+        <article class="episode-card reveal" data-id="2" data-title="Moderadores y matrícula escolar" data-tag="Comunidad escolar" data-duration="10 min" data-youtube="https://www.youtube.com/watch?v=VXszd0PKtSc&pp=ygUNamhheSB3aGVlbGVycw%3D%3D" data-desc="Un episodio dedicado a hablar sobre el rol de los moderadores dentro del proyecto y la importancia de la matrícula escolar en University Gardens." data-icon="graduation">
+          <div class="episode-head">
+            <div class="episode-type">Escuela</div>
+            <div class="episode-duration">40 min</div>
+          </div>
+          <h4>Moderadores y matrícula escolar</h4>
+          <p>En este episodio hablamos sobre el trabajo de los moderadores del proyecto y cómo la matrícula escolar forma parte importante de la comunidad de University Gardens.</p>
+          <div class="episode-footer">
+            <span class="episode-label">Escuchar episodio</span>
+            <button class="mini-play" aria-label="Reproducir Moderadores y matrícula escolar">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5-10-6.5z"></path></svg>
+            </button>
+          </div>
+        </article>
+
+        <article class="episode-card reveal" data-id="3" data-title="Programas de verano" data-tag="Oportunidades" data-duration="14 min" ddata-youtube="https://www.youtube.com/watch?v=VXszd0PKtSc&pp=ygUNamhheSB3aGVlbGVycw%3D%3D" data-desc="Conversaciones sobre programas de verano, oportunidades de crecimiento y experiencias que ayudan a los estudiantes a seguir desarrollándose dentro y fuera de la escuela." data-icon="sun">
+          <div class="episode-head">
+            <div class="episode-type">Oportunidades</div>
+            <div class="episode-duration">14 min</div>
+          </div>
+          <h4>Programas de verano</h4>
+          <p>Conversaciones sobre programas de verano, oportunidades de crecimiento y experiencias que ayudan a los estudiantes a seguir desarrollándose dentro y fuera de la escuela.</p>
+          <div class="episode-footer">
+            <span class="episode-label">Escuchar episodio</span>
+            <button class="mini-play" aria-label="Reproducir Programas de verano">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5-10-6.5z"></path></svg>
+            </button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="about-layout">
+        <article class="about-panel reveal">
+          <p>About</p>
+          <h3>Nuestro propósito</h3>
+          <div class="body">
+            Nuestro podcast tiene como propósito poder crear un espacio donde los universitygardeños puedan expresarse y compartir ideas. Nos daría la oportunidad de hablar sobre temas que impactan nuestra comunidad escolar. University Gardens es reconocida como una escuela académicamente retante, donde los estudiantes constantemente se esfuerzan por alcanzar la excelencia.
+          </div>
+          <div class="about-callout">
+            <small>Misión</small>
+            <strong>A través de conversaciones, entrevistas y videos queremos dar voz a los estudiantes, destacar talentos, discutir temas importantes y fortalecer el sentido de comunidad dentro de la escuela.</strong>
+          </div>
+        </article>
+
+        <div class="about-grid">
+          <article class="reveal">
+            <h4>Integrantes</h4>
+            <p>Alanis S. Flores, Maia Z. Cordero, Coral D. Martínez, Gabriel Correa y Alondra C. Del Valle.</p>
+          </article>
+          <article class="reveal">
+            <h4>Integrantes</h4>
+            <p>Carlos A. Collazo, Sebastian A. Adorno, Fabian Pacheco, Yetsyre Ríos del Valle y Carolina Santiago.</p>
+          </article>
+          <article class="reveal">
+            <h4>Maestros Moderadores</h4>
+            <p>Prof. Inés Vélez (Historia - 10mo), Prof. Oscar Centeno (11mo) y Prof. Joshua Rosado (Salud - 10mo).</p>
+          </article>
+          <article class="reveal">
+            <h4>Agenda</h4>
+            <p>Podcast: 2-3 al mes. Se grabaría durante semana 1 y se editaría en semana 2 para publicarlo. Clips: 2-3 a la semana para promocionar y crear trends interactivos con la comunidad.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="contact-card reveal">
+        <div>
+          <p>Moderadores</p>
+          <h3>Moderadores</h3>
+          <div class="text">
+            Equipo moderador del proyecto escolar.
+          </div>
+        </div>
+
+        <div class="socials" style="width: 100%; justify-content: space-between; gap: 18px;">
+          <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:120px;">
+            <img src="moderador1.jpg" alt="Prof. Joshua Rosado" style="width:88px; height:88px; border-radius:50%; object-fit:cover; display:block; border:1px solid rgba(255,255,255,.86); box-shadow:0 12px 28px rgba(184, 92, 104, .08);" />
+            <span style="margin-top:12px; text-align:center; font-size:.95rem; font-weight:600; color:#7b5960;">Prof. Inés Vélez</span>
+          </div>
+
+          <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:120px;">
+            <img src="moderador2.jpg" alt="Prof, Inés Vélez" style="width:88px; height:88px; border-radius:50%; object-fit:cover; display:block; border:1px solid rgba(255,255,255,.86); box-shadow:0 12px 28px rgba(184, 92, 104, .08);" />
+            <span style="margin-top:12px; text-align:center; font-size:.95rem; font-weight:600; color:#7b5960;">Prof. Joshua Rosado</span>
+          </div>
+
+          <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:120px;">
+            <img src="moderador3.jpg" alt="Prof. Oscar Centeno" style="width:88px; height:88px; border-radius:50%; object-fit:cover; display:block; border:1px solid rgba(255,255,255,.86); box-shadow:0 12px 28px rgba(184, 92, 104, .08);" />
+            <span style="margin-top:12px; text-align:center; font-size:.95rem; font-weight:600; color:#7b5960;">Prof. Oscar Centeno</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-card reveal">
+        <div>
+          <p>Integrantes</p>
+          <h3>Integrantes</h3>
+          <div class="text">
+            Integrantes del proyecto.
+          </div>
+        </div>
+
+        <div style="width:100%; display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:14px 18px; position:relative; z-index:1;">
+          <div style="font-size:.96rem; font-weight:600; color:#7b5960;">Alanis S. Flores</div>
+          <div style="font-size:.96rem; font-weight:600; color:#7b5960;">Maia Z. Cordero</div>
+          <div style="font-size:.96rem; font-weight:600; color:#7b5960;">Coral D. Martínez</div>
+          <div style="font-size:.96rem; font-weight:600; color:#7b5960;">Gabriel Correa</div>
+          <div style="font-size:.96rem; font-weight:600; color:#7b5960;">Alondra C. Del Valle</div>
+          <div style="font-size:.96rem; font-weight:600; color:#7b5960;">Carlos A. Collazo</div>
+          <div style="font-size:.96rem; font-weight:600; color:#7b5960;">Sebastian A. Adorno</div>
+          <div style="font-size:.96rem; font-weight:600; color:#7b5960;">Fabián Pacheco</div>
+          <div style="font-size:.96rem; font-weight:600; color:#7b5960;">Yetsyre Ríos del Valle</div>
+          <div style="font-size:.96rem; font-weight:600; color:#7b5960;">Carolina Santiago</div>
+          <div style="font-size:.96rem; font-weight:600; color:#7b5960;">Denzel García</div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      © 2026 University en Vivo — University Gardens High School
+    </footer>
+  </div>
+
+  <div class="dock" aria-label="Reproductor inferior">
+    <div class="dock-badge" id="dockBadge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 3v13"></path>
+        <path d="M18 9a6 6 0 0 1-12 0"></path>
+        <path d="M8 21h8"></path>
+        <path d="M12 17v4"></path>
+      </svg>
+    </div>
+    <div class="dock-copy">
+      <strong id="dockTitle">Vida estudiantil</strong>
+      <span id="dockMeta">Vida escolar · tema inicial</span>
+    </div>
+    <div class="dock-controls">
+      <div class="dock-line"><div id="dockProgress"></div></div>
+      <button class="dock-toggle" id="dockPlayBtn" aria-label="Reproducir o pausar">
+        <svg id="dockPlayIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l10-6.5-10-6.5z"></path></svg>
+      </button>
+    </div>
+  </div>
+
+  <audio id="mainAudio">
+    <source src="https://samplelib.com/lib/preview/mp3/sample-3s.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const menuIcon = document.getElementById('menuIcon');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileLinks = mobileMenu.querySelectorAll('a');
+
+    const cards = [...document.querySelectorAll('.episode-card')];
+    const audio = document.getElementById('mainAudio');
+
+    const mainTitle = document.getElementById('mainTitle');
+    const mainTag = document.getElementById('mainTag');
+    const mainDesc = document.getElementById('mainDesc');
+    const mainMeta = document.getElementById('mainMeta');
+    const dockTitle = document.getElementById('dockTitle');
+    const dockMeta = document.getElementById('dockMeta');
+
+    const heroPlayBtn = document.getElementById('heroPlayBtn');
+    const heroPlayIcon = document.getElementById('heroPlayIcon');
+    const dockPlayBtn = document.getElementById('dockPlayBtn');
+    const dockPlayIcon = document.getElementById('dockPlayIcon');
+
+    const heroProgressBar = document.getElementById('heroProgressBar');
+    const heroProgressFill = document.getElementById('heroProgressFill');
+    const dockProgress = document.getElementById('dockProgress');
+    const currentTimeEl = document.getElementById('currentTime');
+    const durationTimeEl = document.getElementById('durationTime');
+
+    const mainIcon = document.getElementById('mainIcon');
+    const dockBadge = document.getElementById('dockBadge');
+
+    let activeId = '1';
+    let isPlaying = false;
+
+    const icons = {
+      mic: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"></path><path d="M18 9a6 6 0 0 1-12 0"></path><path d="M8 21h8"></path><path d="M12 17v4"></path></svg>`,
+      graduation: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-5 9 5-9 5-9-5Z"></path><path d="M7 11v4c0 1.5 2.2 3 5 3s5-1.5 5-3v-4"></path><path d="M21 9v6"></path></svg>`,
+      trophy: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8"></path><path d="M12 17v4"></path><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"></path><path d="M17 5h3v2a4 4 0 0 1-4 4"></path><path d="M7 5H4v2a4 4 0 0 0 4 4"></path></svg>`,
+      sun: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></svg>`
+    };
+
+    function setPlayIcon(playing) {
+      heroPlayIcon.innerHTML = playing
+        ? '<path d="M8 5h3v14H8zM13 5h3v14h-3z"></path>'
+        : '<path d="M8 5.5v13l10-6.5-10-6.5z"></path>';
+
+      dockPlayIcon.innerHTML = playing
+        ? '<path d="M8 5h3v14H8zM13 5h3v14h-3z"></path>'
+        : '<path d="M8 5.5v13l10-6.5-10-6.5z"></path>';
+    }
+
+    function formatTime(time) {
+      if (!Number.isFinite(time)) return '0:00';
+      const mins = Math.floor(time / 60);
+      const secs = Math.floor(time % 60).toString().padStart(2, '0');
+      return `${mins}:${secs}`;
+    }
+
+    function setEpisode(card, autoplay = true) {
+      activeId = card.dataset.id;
+      cards.forEach(c => {
+        c.classList.toggle('active', c === card);
+        const label = c.querySelector('.episode-label');
+        label.textContent = c === card ? (isPlaying && autoplay ? 'Reproduciendo' : 'Seleccionado') : 'Escuchar episodio';
+      });
+
+      mainTitle.textContent = card.dataset.title;
+      mainTag.textContent = card.dataset.tag;
+      mainDesc.textContent = card.dataset.desc;
+      mainMeta.textContent = `${card.dataset.title} · tema inicial`; 
+      dockTitle.textContent = card.dataset.title;
+      dockMeta.textContent = `${card.dataset.tag} · tema inicial`; 
+
+      const iconMarkup = icons[card.dataset.icon] || icons.mic;
+      mainIcon.innerHTML = iconMarkup;
+      dockBadge.innerHTML = iconMarkup;
+
+      audio.src = card.dataset.audio;
+      audio.load();
+      heroProgressFill.style.width = '0%';
+      dockProgress.style.width = '0%';
+      currentTimeEl.textContent = '0:00';
+      durationTimeEl.textContent = '0:00';
+
+      if (autoplay) {
+        audio.play().then(() => {
+          isPlaying = true;
+          setPlayIcon(true);
+          cards.forEach(c => c.querySelector('.episode-label').textContent = c.dataset.id === activeId ? 'Reproduciendo' : 'Escuchar episodio');
+        }).catch(() => {
+          isPlaying = false;
+          setPlayIcon(false);
+        });
+      } else {
+        isPlaying = false;
+        setPlayIcon(false);
+      }
+    }
+
+    function togglePlay() {
+      if (isPlaying) {
+        audio.pause();
+        isPlaying = false;
+        setPlayIcon(false);
+      } else {
+        audio.play().then(() => {
+          isPlaying = true;
+          setPlayIcon(true);
+        }).catch(() => {
+          isPlaying = false;
+          setPlayIcon(false);
+        });
+      }
+
+      cards.forEach(c => c.querySelector('.episode-label').textContent = c.dataset.id === activeId ? (isPlaying ? 'Reproduciendo' : 'Seleccionado') : 'Escuchar episodio');
+    }
+
+    cards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        const sameCard = card.dataset.id === activeId;
+        if (sameCard) {
+          togglePlay();
+          return;
+        }
+        setEpisode(card, true);
+      });
+    });
+
+    heroPlayBtn.addEventListener('click', togglePlay);
+    dockPlayBtn.addEventListener('click', togglePlay);
+
+    audio.addEventListener('loadedmetadata', () => {
+      durationTimeEl.textContent = formatTime(audio.duration);
+    });
+
+    audio.addEventListener('timeupdate', () => {
+      const progress = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+      heroProgressFill.style.width = `${progress}%`;
+      dockProgress.style.width = `${progress}%`;
+      currentTimeEl.textContent = formatTime(audio.currentTime);
+      durationTimeEl.textContent = formatTime(audio.duration);
+    });
+
+    audio.addEventListener('pause', () => {
+      isPlaying = false;
+      setPlayIcon(false);
+      cards.forEach(c => c.querySelector('.episode-label').textContent = c.dataset.id === activeId ? 'Seleccionado' : 'Escuchar episodio');
+    });
+
+    audio.addEventListener('play', () => {
+      isPlaying = true;
+      setPlayIcon(true);
+      cards.forEach(c => c.querySelector('.episode-label').textContent = c.dataset.id === activeId ? 'Reproduciendo' : 'Escuchar episodio');
+    });
+
+    audio.addEventListener('ended', () => {
+      isPlaying = false;
+      setPlayIcon(false);
+      cards.forEach(c => c.querySelector('.episode-label').textContent = c.dataset.id === activeId ? 'Seleccionado' : 'Escuchar episodio');
+    });
+
+    heroProgressBar.addEventListener('click', (e) => {
+      if (!audio.duration) return;
+      const rect = heroProgressBar.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const ratio = Math.max(0, Math.min(1, x / rect.width));
+      audio.currentTime = ratio * audio.duration;
+    });
+
+    menuBtn.addEventListener('click', () => {
+      const open = mobileMenu.classList.toggle('open');
+      menuIcon.innerHTML = open
+        ? '<path d="M6 6l12 12"></path><path d="M18 6 6 18"></path>'
+        : '<path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h16"></path>';
+    });
+
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        menuIcon.innerHTML = '<path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h16"></path>';
+      });
+    });
+
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          entry.target.style.transitionDelay = `${Math.min(index * 70, 220)}ms`;
+          entry.target.classList.add('show');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.14 });
+
+    revealEls.forEach(el => observer.observe(el));
+
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      document.querySelector('.glow').style.transform = `translate3d(${y * 0.01}px, ${y * -0.03}px, 0)`;
+      document.querySelector('.glow-2').style.transform = `translate3d(${y * -0.015}px, ${y * 0.01}px, 0)`;
+      document.querySelector('.glow-3').style.transform = `translateX(-50%) translateY(${y * -0.02}px)`;
+    }, { passive: true });
+
+    setEpisode(cards[0], false);
+    setTimeout(() => {
+      document.querySelectorAll('.hero .reveal').forEach((el, i) => {
+        el.style.transitionDelay = `${i * 90}ms`;
+        requestAnimationFrame(() => el.classList.add('show'));
+      });
+    }, 100);
+  </script>
+</body>
+</html>
